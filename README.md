@@ -11,11 +11,11 @@ A clean, modular multimedia processing laboratory repository featuring implement
 
 ## 📑 Table of Contents
 - [Architecture & Repository Structure](#-architecture--repository-structure)
-- [Core Lab Tasks](#-core-lab-tasks)
 - [Prerequisites & Setup](#-prerequisites--setup)
 - [Quick Start & Execution](#-quick-start--execution)
+- [Core Lab Tasks](#-core-lab-tasks)
 - [Datasets Catalog](#-datasets-catalog)
-- [Git Workflow (Push under your profile)](#-git-workflow)
+- [Git Workflow](#-git-workflow)
 - [Author](#-author)
 
 ---
@@ -24,83 +24,47 @@ A clean, modular multimedia processing laboratory repository featuring implement
 
 ```text
 multimedia-lab/
-├── .gitignore                          # Clean production Git ignore
-├── README.md                           # Master laboratory documentation
-├── requirements.txt                    # Project dependencies
+├── .gitignore                          # Git ignore rules
+├── README.md                           # This documentation
+├── requirements.txt                    # Python dependencies
 ├── main.py                             # Central CLI task runner
 │
-├── task-01-image-analyser/             # 🖼️ Task 1: Image Spatial & EXIF Metadata Analyzer
-│   ├── README.md
+├── task-01-image-analyser/             # 🖼️ Image Spatial & EXIF Metadata Analyzer
 │   ├── image_analyser.py
 │   └── outputs/
-│       └── image_processing_output.png
+│       └── task-01-image-analysis.png
 │
-├── task-02-video-analyser/             # 🎥 Task 2: Video Stream Demuxer & Metadata Analyzer
-│   ├── README.md
+├── task-02-video-analyser/             # 🎥 Video Stream Demuxer & Metadata Analyzer
 │   ├── video_analyser.py
 │   └── outputs/
-│       └── video_processing.png
+│       └── task-02-video-analysis.png
 │
-├── task-03-audio-analyser/             # 🎵 Task 3: Audio Signal & Stream Properties Analyzer
-│   ├── README.md
+├── task-03-audio-analyser/             # 🎵 Audio Signal & Stream Properties Analyzer
 │   ├── audio_analyser.py
 │   └── outputs/
-│       └── audio_processing.png
+│       └── task-03-audio-analysis.png
 │
-├── datasets/                           # 🗂️ Categorized Media Assets
-│   ├── README.md
+├── datasets/                           # 🗂️ Categorized media assets
 │   ├── images/                         # flower.jpg, flower2.jpg
 │   ├── audio/                          # Afternoon_Window.mp3
 │   └── video/                          # voiceover.mp4
 │
-└── tools/                              # 🛠️ Environment Diagnostics (env_checker.py)
-    └── env_checker.py
+└── tools/                              # 🛠️ Diagnostics
+    └── env_checker.py                  # Environment & toolchain check
 ```
 
----
-
-## 🎯 Core Lab Tasks
-
-### 🖼️ Task 1: Image Spatial & EXIF Metadata Analyzer
-- **Folder:** [`task-01-image-analyser/`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-01-image-analyser)
-- **Script:** [`image_analyser.py`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-01-image-analyser/image_analyser.py)
-- **Capabilities:** Analyzes format, resolution (DPI), dimensions, megapixels, aspect ratios, color bands, and embedded EXIF tags.
-- **Run:**
-  ```bash
-  python task-01-image-analyser/image_analyser.py
-  # With custom image:
-  python task-01-image-analyser/image_analyser.py --file datasets/images/flower2.jpg
-  ```
-
----
-
-### 🎥 Task 2: Video Stream Demuxer & Analyzer
-- **Folder:** [`task-02-video-analyser/`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-02-video-analyser)
-- **Script:** [`video_analyser.py`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-02-video-analyser/video_analyser.py)
-- **Capabilities:** Interrogates video containers, decodes video/audio streams, calculates frame rate (FPS), resolutions, bitrates, and pixel formats.
-- **Run:**
-  ```bash
-  python task-02-video-analyser/video_analyser.py
-  # With custom video:
-  python task-02-video-analyser/video_analyser.py --file datasets/video/voiceover.mp4
-  ```
-
----
-
-### 🎵 Task 3: Audio Signal & Stream Analyzer
-- **Folder:** [`task-03-audio-analyser/`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-03-audio-analyser)
-- **Script:** [`audio_analyser.py`](file:///c:/Users/rudra/Desktop/multimedia%20lab/task-03-audio-analyser/audio_analyser.py)
-- **Capabilities:** Extracts audio sampling frequencies, channel layouts, stream bitrates, sample formats, and ID3/Vorbis tags.
-- **Run:**
-  ```bash
-  python task-03-audio-analyser/audio_analyser.py
-  # With custom audio:
-  python task-03-audio-analyser/audio_analyser.py --file datasets/audio/Afternoon_Window.mp3
-  ```
+Each `outputs/` screenshot is an actual terminal run of that task against this
+repository's own datasets.
 
 ---
 
 ## ⚙️ Prerequisites & Setup
+
+| Requirement | Needed by | Notes |
+| --- | --- | --- |
+| Python >= 3.8 | All tasks | Tested on 3.13.2 |
+| `Pillow` | Task 1 | From `requirements.txt` |
+| **FFprobe** (FFmpeg) | **Task 2, Task 3** | Without it both scripts fall back to basic file info only |
 
 ```bash
 # 1. Virtual environment setup (Recommended)
@@ -111,8 +75,30 @@ python -m venv .venv
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Verify environment
+# 3. Install FFmpeg / FFprobe (required for Task 2 & Task 3)
+# Windows : winget install Gyan.FFmpeg
+# macOS   : brew install ffmpeg
+# Linux   : sudo apt install ffmpeg
+
+# 4. Verify environment
 python tools/env_checker.py
+```
+
+### Portable FFmpeg (no system install)
+
+Instead of a system-wide install, a portable build can live in
+`tools/ffmpeg/bin/` (`ffprobe.exe`, `ffmpeg.exe`). That folder is git-ignored,
+so the binaries never enter the repository. Put it on `PATH` for the current
+shell session before running Task 2 or Task 3:
+
+```powershell
+# Windows PowerShell - current session only
+$env:PATH = "$PWD\tools\ffmpeg\bin;$env:PATH"
+```
+
+```bash
+# macOS / Linux - current session only
+export PATH="$PWD/tools/ffmpeg/bin:$PATH"
 ```
 
 ---
@@ -135,41 +121,155 @@ python main.py -t all    # Run all tasks & diagnostics in sequence
 
 ---
 
+## 🎯 Core Lab Tasks
+
+### 🖼️ Task 1: Image Spatial & EXIF Metadata Analyzer
+
+- **Script:** [`task-01-image-analyser/image_analyser.py`](task-01-image-analyser/image_analyser.py)
+- **Capabilities:** Analyzes format, resolution (DPI), dimensions, megapixels, aspect ratio, color mode and bands, plus embedded EXIF tags (Make, Model, Date Taken, Orientation, Software).
+- **Supported formats:** JPG, JPEG, PNG, TIFF, TIF, WEBP, BMP, GIF
+
+```bash
+python task-01-image-analyser/image_analyser.py
+# With a custom image:
+python task-01-image-analyser/image_analyser.py --file datasets/images/flower2.jpg
+```
+
+Run against `datasets/images/flower.jpg`:
+
+![Task 01 image analysis output](task-01-image-analyser/outputs/task-01-image-analysis.png)
+
+| Property | Value |
+| --- | --- |
+| File Format | JPEG (ISO 10918) |
+| File Size | 130.40 KB |
+| Dimensions | 720 x 1600 px |
+| Megapixels | 1.15 MP |
+| Aspect Ratio | 0.45:1 |
+| Color Mode | RGB (3 bands) |
+| EXIF | Not embedded in this file |
+
+---
+
+### 🎥 Task 2: Video Stream Demuxer & Metadata Analyzer
+
+- **Script:** [`task-02-video-analyser/video_analyser.py`](task-02-video-analyser/video_analyser.py)
+- **Capabilities:** Interrogates video containers via FFprobe, demuxes video and audio streams, and reports frame rate, resolution, aspect ratio, bitrates, pixel format and container tags.
+- **Requires:** FFprobe on `PATH`
+
+```bash
+python task-02-video-analyser/video_analyser.py
+# With a custom video:
+python task-02-video-analyser/video_analyser.py --file path/to/video.mp4
+```
+
+Run against `datasets/video/voiceover.mp4`:
+
+![Task 02 video analysis output](task-02-video-analyser/outputs/task-02-video-analysis.png)
+
+| Property | Value |
+| --- | --- |
+| Container | QuickTime / MOV (`mov,mp4,m4a,3gp,3g2,mj2`) |
+| File Size | 2.65 MB |
+| Duration | 00:00:10.005 |
+| Overall Bitrate | 2223.35 kbps |
+| Video Codec | H.264 / AVC / MPEG-4 part 10 (`h264`) |
+| Resolution | 1280 x 720 px @ 24.00 fps |
+| Video Bitrate | 2084.07 kbps |
+| Pixel Format | `yuv420p` |
+| Audio Codec | AAC (`aac`), 48000 Hz, stereo |
+| Audio Bitrate | 128.44 kbps |
+
+---
+
+### 🎵 Task 3: Audio Signal & Stream Properties Analyzer
+
+- **Script:** [`task-03-audio-analyser/audio_analyser.py`](task-03-audio-analyser/audio_analyser.py)
+- **Capabilities:** Extracts sample rate, channel layout, stream bitrate, sample format, bits-per-sample, duration and embedded ID3 / Vorbis tags.
+- **Requires:** FFprobe on `PATH`
+
+```bash
+python task-03-audio-analyser/audio_analyser.py
+# With a custom audio file:
+python task-03-audio-analyser/audio_analyser.py --file path/to/audio.mp3
+```
+
+Run against `datasets/audio/Afternoon_Window.mp3`:
+
+![Task 03 audio analysis output](task-03-audio-analyser/outputs/task-03-audio-analysis.png)
+
+| Property | Value |
+| --- | --- |
+| Container | MP2/3 (MPEG audio layer 2/3) |
+| File Size | 727.16 KB |
+| Duration | 00:00:30.772 |
+| Overall Bitrate | 193.58 kbps |
+| Codec | MP3 (MPEG audio layer 3) |
+| Sample Rate | 44100 Hz |
+| Channels | 2 (stereo) |
+| Sample Format | `fltp` |
+| Stream Bitrate | 192.00 kbps |
+| ID3 Tags | None embedded in this file |
+
+---
+
 ## 🗂️ Datasets Catalog
 
-Categorized under [`datasets/`](file:///c:/Users/rudra/Desktop/multimedia%20lab/datasets):
-- **`datasets/images/`**: `flower.jpg`, `flower2.jpg`
-- **`datasets/audio/`**: `Afternoon_Window.mp3`
-- **`datasets/video/`**: `voiceover.mp4`
+Media assets under [`datasets/`](datasets/). Specifications below are the
+measured values reported by the analyzers themselves.
+
+### 🖼️ Images — [`datasets/images/`](datasets/images/)
+
+| File | Format | Size | Dimensions | Mode | EXIF |
+| --- | --- | --- | --- | --- | --- |
+| `flower.jpg` | JPEG (ISO 10918) | 130.40 KB | 720 x 1600 px (1.15 MP) | RGB | None embedded |
+| `flower2.jpg` | JPEG (ISO 10918) | 88.54 KB | 720 x 1600 px (1.15 MP) | RGB | None embedded |
+
+### 🎵 Audio — [`datasets/audio/`](datasets/audio/)
+
+| File | Container | Size | Duration | Codec | Sample Rate | Channels | Bitrate |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `Afternoon_Window.mp3` | MP2/3 | 727.16 KB | 00:00:30.772 | MP3 | 44100 Hz | 2 (stereo) | 192.00 kbps |
+
+### 🎥 Video — [`datasets/video/`](datasets/video/)
+
+| File | Container | Size | Duration | Video | Audio |
+| --- | --- | --- | --- | --- | --- |
+| `voiceover.mp4` | QuickTime / MOV | 2.65 MB | 00:00:10.005 | H.264 1280 x 720 @ 24.00 fps, `yuv420p`, 2084.07 kbps | AAC 48000 Hz stereo, 128.44 kbps |
 
 ---
 
 ## 🛠️ Git Workflow
 
+This repository is committed under a **personal** GitHub identity, set as a
+repo-local override so a machine-wide (work) identity stays untouched:
+
 ```powershell
-# 1. Stage & Commit Root Config and Tools
-git add .gitignore requirements.txt README.md main.py tools
-git commit -m "chore: setup clean task-based structure, tools, and documentation"
+# Repo-local identity - overrides the global config for this repository only
+git config --local user.name  "Rudranshpardeshi09"
+git config --local user.email "rudranshpardeshi12@gmail.com"
 
-# 2. Stage & Commit Task 1 (Image Analyser) + Datasets
-git add task-01-image-analyser datasets/images
-git commit -m "feat(task-01): implement image spatial and EXIF metadata analyzer"
+# Verify which identity this repo will commit as
+git config user.name; git config user.email
+```
 
-# 3. Stage & Commit Task 2 (Video Analyser) + Datasets
-git add task-02-video-analyser datasets/video
-git commit -m "feat(task-02): implement video container demuxer and stream analyzer"
-
-# 4. Stage & Commit Task 3 (Audio Analyser) + Datasets
-git add task-03-audio-analyser datasets/audio
-git commit -m "feat(task-03): implement audio signal stream analyzer and ID3 tag parser"
-
-# 5. Push to GitHub
+```powershell
+# Standard commit & push cycle
+git add -A
+git commit -m "feat: describe the change"
 git push origin main
 ```
+
+> **Credentials:** keep the access token out of the remote URL. Use the OS
+> credential helper instead, so nothing secret is stored in `.git/config`:
+> ```powershell
+> git config --global credential.helper manager
+> git remote set-url origin https://github.com/Rudranshpardeshi09/Multimedia-lab.git
+> ```
 
 ---
 
 ## 👤 Author
-**Rudransh Pardeshi**  
+**Rudransh Pardeshi**
 - GitHub: [@Rudranshpardeshi09](https://github.com/Rudranshpardeshi09)
 - Email: `rudranshpardeshi12@gmail.com`

@@ -1,5 +1,11 @@
 # Multimedia Systems Lab - Core Dependencies
 # Python >= 3.8
+#
+# System requirement (NOT installable via pip):
+#   FFmpeg / FFprobe must be on PATH for Task 02 (video) and Task 03 (audio).
+#   Windows: winget install Gyan.FFmpeg | macOS: brew install ffmpeg
+#   Linux:   sudo apt install ffmpeg
+#   See README -> Prerequisites & Setup
 
 # Core Media Processing Libraries
 Pillow>=10.0.0

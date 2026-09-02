@@ -57,3 +57,6 @@ output/
 temp/
 scratch/
 *.tmp
+
+# Portable FFmpeg toolchain (local only - see README prerequisites)
+tools/ffmpeg/
