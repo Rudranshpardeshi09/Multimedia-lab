@@ -1,0 +1,106 @@
+<!doctype html>
+<!--
+  Task 04: Voice Transformer — Web UI
+  Multimedia Systems Laboratory
+  Author: Rudranshpardeshi09
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="Record or upload up to 30 seconds of speech and hear the same performance in a different AI voice."
+    />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f6f7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c0c0f" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Retone — AI Speech-to-Speech Voice Transformer</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%234f46e5'/%3E%3Cg stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M5 12h1M8.5 9v6M12 6.5v11M15.5 9v6M19 11v2'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container">
+        <div class="brand">
+          <span class="brand-mark" data-icon="wave" data-size="20"></span>
+          <div>
+            <p class="text-base semibold">Retone</p>
+            <p class="text-xs muted">AI Speech-to-Speech Voice Transformer</p>
+          </div>
+        </div>
+        <span class="pill">Prototype</span>
+      </div>
+    </header>
+
+    <main id="main" class="container" tabindex="-1">
+      <div class="intro">
+        <h1>Transform your voice. Keep your performance.</h1>
+        <p class="text-base">
+          Record or upload up to <span data-max-duration>30</span> seconds of speech and hear the same performance
+          in a different AI voice.
+        </p>
+      </div>
+
+      <div class="stack-lg">
+        <!-- Filled by app.js: either the transformer or the setup checklist. -->
+        <div id="app-root">
+          <div class="card">
+            <p class="loading" role="status"><span data-icon="spinner" data-size="18"></span>Loading…</p>
+          </div>
+        </div>
+
+        <noscript>
+          <div class="card">
+            <p class="text-sm">This app needs JavaScript to record and transform audio. Please enable it and reload.</p>
+          </div>
+        </noscript>
+
+        <section aria-labelledby="info-heading" class="info-grid">
+          <h2 id="info-heading" class="sr-only">About this prototype</h2>
+          <div class="box">
+            <h3>How it works</h3>
+            <p>
+              Your recording is sent to our server and passed to ElevenLabs Speech-to-Speech. Words, timing, pauses and
+              emotion stay the same — only the voice changes. Nothing is transcribed or rewritten.
+            </p>
+          </div>
+          <div class="box">
+            <h3>Privacy</h3>
+            <p>
+              We don't save recordings in this application — audio is processed in memory and never written to disk.
+              Audio is sent to ElevenLabs for voice processing and is subject to their processing policies.
+            </p>
+          </div>
+          <div class="box">
+            <h3>Best results</h3>
+            <p>
+              Speak clearly in a quiet room, 5–15 seconds at a time (up to <span data-max-duration>30</span>). English,
+              Hindi and Hinglish work well with the multilingual model. Free-tier processing capacity is limited.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          Retone — a non-commercial technical prototype. Prototype powered by
+          <a href="https://elevenlabs.io" rel="noreferrer" target="_blank">ElevenLabs</a>.
+        </p>
+        <p class="links">
+          <span>No accounts, no history, no stored audio.</span>
+          <span>Multimedia Systems Laboratory — Task 04</span>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
