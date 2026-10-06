@@ -14,6 +14,8 @@ TASK_MAP = {
     "1": ("Task 01: Image Spatial & EXIF Metadata Analyzer", ROOT_DIR / "task-01-image-analyser" / "image_analyser.py"),
     "2": ("Task 02: Video Stream Demuxer & Metadata Analyzer", ROOT_DIR / "task-02-video-analyser" / "video_analyser.py"),
     "3": ("Task 03: Audio Signal & Stream Properties Analyzer", ROOT_DIR / "task-03-audio-analyser" / "audio_analyser.py"),
+    "4": ("Task 04: AI Speech-to-Speech Voice Transformer", ROOT_DIR / "task-04-voice-transformer" / "voice_transformer.py"),
+    "5": ("Task 05: Image Processing & Enhancement", ROOT_DIR / "task-05-image-enhancement" / "image_enhancer.py"),
     "d": ("Diagnostics: Environment & Toolchain Check", ROOT_DIR / "tools" / "env_checker.py"),
 }
 
@@ -28,7 +30,7 @@ def run_script(script_path: Path, extra_args=None):
     if extra_args:
         cmd.extend(extra_args)
 
-    print(f"\n[Executing] {' '.join(cmd)}\n")
+    print(f"\n[Executing] {' '.join(cmd)}\n", flush=True)
     subprocess.run(cmd)
 
 
@@ -43,25 +45,27 @@ def interactive_menu():
         print(f"  [1] {TASK_MAP['1'][0]}")
         print(f"  [2] {TASK_MAP['2'][0]}")
         print(f"  [3] {TASK_MAP['3'][0]}")
+        print(f"  [4] {TASK_MAP['4'][0]}")
+        print(f"  [5] {TASK_MAP['5'][0]}")
         print(f"  [D] {TASK_MAP['d'][0]}")
-        print("  [A] Run All 3 Tasks & Diagnostics")
+        print("  [A] Run All Tasks & Diagnostics")
         print("  [Q] Exit")
         print("-" * 65)
 
-        choice = input("Enter choice (1, 2, 3, D, A, Q): ").strip().lower()
+        choice = input("Enter choice (1, 2, 3, 4, 5, D, A, Q): ").strip().lower()
 
         if choice == "q":
             print("Exiting launcher. Goodbye!")
             break
         elif choice == "a":
-            for k in ["d", "1", "2", "3"]:
+            for k in ["d", "1", "2", "3", "4", "5"]:
                 _, path = TASK_MAP[k]
                 run_script(path)
         elif choice in TASK_MAP:
             _, path = TASK_MAP[choice]
             run_script(path)
         else:
-            print("[Warning] Invalid selection. Please enter 1, 2, 3, D, A, or Q.")
+            print("[Warning] Invalid selection. Please enter 1, 2, 3, 4, 5, D, A, or Q.")
 
 
 def main():
@@ -70,8 +74,8 @@ def main():
     )
     parser.add_argument(
         "-t", "--task",
-        choices=["1", "2", "3", "d", "all"],
-        help="Task number to execute directly (1: Image, 2: Video, 3: Audio, d: Diagnostics, all: All)"
+        choices=["1", "2", "3", "4", "5", "d", "all"],
+        help="Task number to execute directly (1: Image, 2: Video, 3: Audio, 4: Voice Transformer, 5: Image Enhancement, d: Diagnostics, all: All)"
     )
     parser.add_argument(
         "-f", "--file",
@@ -82,7 +86,7 @@ def main():
 
     if args.task:
         if args.task == "all":
-            for k in ["d", "1", "2", "3"]:
+            for k in ["d", "1", "2", "3", "4", "5"]:
                 _, path = TASK_MAP[k]
                 run_script(path)
         else:

@@ -5,7 +5,7 @@
 [![Status](https://img.shields.io/badge/status-active-brightgreen.svg)]()
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey.svg)]()
 
-A clean, modular multimedia processing laboratory repository featuring implementations for **Image Spatial & EXIF Metadata Analysis**, **Video Stream Demuxing & Container Inspection**, and **Audio Signal & ID3 Stream Analysis**.
+A clean, modular multimedia processing laboratory repository featuring implementations for **Image Spatial & EXIF Metadata Analysis**, **Video Stream Demuxing & Container Inspection**, **Audio Signal & ID3 Stream Analysis**, **AI Speech-to-Speech Voice Transformation**, and **Image Processing & Enhancement**.
 
 ---
 
@@ -44,6 +44,19 @@ multimedia-lab/
 │   └── outputs/
 │       └── task-03-audio-analysis.png
 │
+├── task-04-voice-transformer/          # 🗣️ AI Speech-to-Speech Voice Transformer
+│   ├── voice_transformer.py            # CLI entry point (+ --serve for the web UI)
+│   ├── .env.example                    # ElevenLabs key & voice IDs template
+│   ├── vt/                             # config, voices, audio validation, providers, service, Flask server
+│   ├── web/                            # index.html, styles.css, app.js (record / upload UI)
+│   └── outputs/
+│       └── task-04-demo.mp4            # screen recording of the web app
+│
+├── task-05-image-enhancement/          # 🖼️ Image Processing & Enhancement
+│   ├── image_enhancer.py
+│   └── outputs/
+│       └── flower/before_after.png
+│
 ├── datasets/                           # 🗂️ Categorized media assets
 │   ├── images/                         # flower.jpg, flower2.jpg
 │   ├── audio/                          # Afternoon_Window.mp3
@@ -64,7 +77,10 @@ repository's own datasets.
 | --- | --- | --- |
 | Python >= 3.8 | All tasks | Tested on 3.13.2 |
 | `Pillow` | Task 1 | From `requirements.txt` |
-| **FFprobe** (FFmpeg) | **Task 2, Task 3** | Without it both scripts fall back to basic file info only |
+| **FFprobe** (FFmpeg) | **Task 2, Task 3, Task 4** | Without it Tasks 2/3 fall back to basic file info only; Task 4 needs it to probe durations |
+| `requests`, `flask`, `python-dotenv` | Task 4 | From `requirements.txt` |
+| `numpy`, `opencv-python-headless` | Task 5 | From `requirements.txt` |
+| ElevenLabs API key (free plan) | Task 4 | Required - see the Task 4 setup below |
 
 ```bash
 # 1. Virtual environment setup (Recommended)
@@ -115,6 +131,8 @@ python main.py
 python main.py -t 1      # Run Task 1 (Image Analyzer)
 python main.py -t 2      # Run Task 2 (Video Analyzer)
 python main.py -t 3      # Run Task 3 (Audio Analyzer)
+python main.py -t 4      # Run Task 4 (Voice Transformer CLI)
+python main.py -t 5      # Run Task 5 (Image Processing & Enhancement)
 python main.py -t d      # Run Diagnostics (env_checker.py)
 python main.py -t all    # Run all tasks & diagnostics in sequence
 ```
@@ -210,6 +228,88 @@ Run against `datasets/audio/Afternoon_Window.mp3`:
 | Sample Format | `fltp` |
 | Stream Bitrate | 192.00 kbps |
 | ID3 Tags | None embedded in this file |
+
+---
+
+### 🗣️ Task 4: AI Speech-to-Speech Voice Transformer
+
+- **Script:** [`task-04-voice-transformer/voice_transformer.py`](task-04-voice-transformer/voice_transformer.py)
+
+You speak into the mic (or upload a clip), choose a voice, and the AI says the
+same thing back in that voice. The words, pauses and emotion stay yours; only
+the voice changes. The conversion is done by the
+[ElevenLabs](https://elevenlabs.io) Speech-to-Speech API.
+
+This is a Python version of the
+[voice-transformer](https://github.com/ARPANPATRA111/mm-lab/tree/main/voice-transformer)
+web app from the mm-lab repo.
+
+**Demo** - click the image to watch the video:
+
+[![Task 04 demo](task-04-voice-transformer/outputs/task-04-demo.png)](task-04-voice-transformer/outputs/task-04-demo.mp4)
+
+#### Setup
+
+1. Create a free account at [elevenlabs.io](https://elevenlabs.io) and make an API key.
+2. Copy `task-04-voice-transformer/.env.example` to `task-04-voice-transformer/.env`.
+3. Paste your key after `ELEVENLABS_API_KEY=` and add at least one voice ID.
+   These two built-in voices work on the free plan:
+   - George (deep): `JBFqnCBsd6RMkjVDRZzb`
+   - Sarah (bright): `EXAVITQu4vr4xnSDxMaL`
+
+`.env` is git-ignored, so your key never gets pushed.
+
+#### Run it
+
+```bash
+# Web app - open http://127.0.0.1:5000, record, pick a voice, click Transform
+python task-04-voice-transformer/voice_transformer.py --serve
+
+# Or convert a file from the terminal
+python task-04-voice-transformer/voice_transformer.py --file my_voice.wav --voice deep-studio
+```
+
+Clips can be up to 30 seconds long (MP3, WAV, M4A, OGG, FLAC or WebM). The
+dataset song is 30.8 s, so add `--trim 10` if you use it. The result is saved
+as an MP3 in `task-04-voice-transformer/outputs/`.
+
+> **Note:** your audio is sent to ElevenLabs for processing. Nothing is stored by this app.
+
+---
+
+### 🖼️ Task 5: Image Processing & Enhancement
+
+- **Script:** [`task-05-image-enhancement/image_enhancer.py`](task-05-image-enhancement/image_enhancer.py)
+- **Basic processing:** grayscale, half-size resize, threshold (128), Gaussian blur (radius 2), Canny edges (100, 200), 90° clockwise rotation. The operations and parameters follow the mm-lab [Cluster02 image-processing](https://github.com/ARPANPATRA111/mm-lab/tree/main/Cluster02-Image-Processing) script.
+- **Enhancement:**
+  - histogram equalization, applied to the brightness (Y) channel only so colours stay the same;
+  - gamma correction (`--gamma`, default 0.7);
+  - sharpening (unsharp mask);
+  - median filter denoising (3x3).
+- **Output:** every result is saved as PNG in `task-05-image-enhancement/outputs/<image-name>/`, along with a `before_after.png` that shows the original next to the equalized image.
+
+```bash
+python task-05-image-enhancement/image_enhancer.py
+# With a custom image and gamma:
+python task-05-image-enhancement/image_enhancer.py --file datasets/images/flower2.jpg --gamma 0.5
+```
+
+Run against `datasets/images/flower.jpg` (left: original, right: histogram equalized):
+
+![Task 05 before and after](task-05-image-enhancement/outputs/flower/before_after.png)
+
+| Image | Brightness | Contrast | Sharpness |
+| --- | --- | --- | --- |
+| original | 132.38 | 58.92 | 171.6 |
+| histogram_equalization | 128.39 | 73.17 | 269.3 |
+| gamma_correction | 156.28 | 52.78 | 132.3 |
+| sharpen | 132.24 | 61.47 | 872.0 |
+| median_denoise | 132.43 | 58.72 | 79.3 |
+
+**Reading the table:**
+- **Brightness** is the mean gray level. Gamma 0.7 raises it, as expected.
+- **Contrast** is the standard deviation. Histogram equalization increases it the most.
+- **Sharpness** is the variance of the Laplacian. Sharpening raises it about 5x, while the median filter lowers it because it smooths out fine detail along with the noise.
 
 ---
 

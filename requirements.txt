@@ -1,21 +1,17 @@
-# Multimedia Systems Lab - Core Dependencies
-# Python >= 3.8
-#
-# System requirement (NOT installable via pip):
-#   FFmpeg / FFprobe must be on PATH for Task 02 (video) and Task 03 (audio).
-#   Windows: winget install Gyan.FFmpeg | macOS: brew install ffmpeg
-#   Linux:   sudo apt install ffmpeg
-#   See README -> Prerequisites & Setup
+
 
 # Core Media Processing Libraries
 Pillow>=10.0.0
 colorama>=0.4.6
 tabulate>=0.9.0
 
-# Optional / Extended Multimedia Processing
-# Uncomment as needed for advanced signal/image processing tasks:
-# numpy>=1.24.0
-# opencv-python>=4.8.0
-# matplotlib>=3.7.0
-# scipy>=1.11.0
-# ffmpeg-python>=0.2.0
+# Task 04: Voice Transformer (ElevenLabs Speech-to-Speech + web UI)
+requests>=2.31.0
+flask>=3.0.0
+python-dotenv>=1.0.0
+
+# Task 05: Image Processing & Enhancement
+numpy>=1.24.0
+opencv-python-headless>=4.8.0
+
+

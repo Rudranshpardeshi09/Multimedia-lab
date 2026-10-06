@@ -60,3 +60,15 @@ scratch/
 
 # Portable FFmpeg toolchain (local only - see README prerequisites)
 tools/ffmpeg/
+
+# Task 04 secrets & recordings - keep only the demo video and its preview
+.env
+.env.local
+task-04-voice-transformer/outputs/*
+!task-04-voice-transformer/outputs/task-04-demo.mp4
+!task-04-voice-transformer/outputs/task-04-demo.png
+
+# Task 05 generated images - keep only the before/after sample
+task-05-image-enhancement/outputs/**
+!task-05-image-enhancement/outputs/flower/
+!task-05-image-enhancement/outputs/flower/before_after.png
