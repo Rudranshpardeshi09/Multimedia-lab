@@ -51,6 +51,7 @@ def get_audio_metadata(audio_path: str) -> dict:
         "-print_format", "json",
         "-show_format",
         "-show_streams",
+        "-count_packets",
         audio_path
     ]
 
@@ -167,9 +168,26 @@ def analyze_audio(audio_path: str) -> bool:
             print_tag("Channel Layout", audio_stream.get("channel_layout"))
             print_tag("Sample Format", audio_stream.get("sample_fmt"))
             s_br = audio_stream.get("bit_rate")
-            print_tag("Stream Bitrate", f"{int(s_br) / 1000:.2f} kbps" if s_br else "Not Available")
-            print_tag("Bits Per Sample", audio_stream.get("bits_per_sample"))
-            print_tag("Frame Count", audio_stream.get("nb_frames"))
+            if s_br:
+                print_tag("Stream Bitrate", f"{int(s_br) / 1000:.2f} kbps")
+            elif bit_rate:
+                print_tag("Stream Bitrate", f"~{int(bit_rate) / 1000:.2f} kbps (estimated from file size)")
+            else:
+                print_tag("Stream Bitrate", "Not Available")
+
+            bits = audio_stream.get("bits_per_sample") or audio_stream.get("bits_per_raw_sample")
+            if bits and str(bits) not in ("0", "N/A"):
+                print_tag("Bits Per Sample", f"{bits} bit")
+            else:
+                print_tag("Bits Per Sample", "N/A (compressed format, no fixed bit depth)")
+
+            frames = audio_stream.get("nb_frames") or audio_stream.get("nb_read_packets")
+            duration = format_data.get("duration")
+            if frames and duration:
+                frame_ms = float(duration) / int(frames) * 1000
+                print_tag("Frame Count", f"{frames} (~{frame_ms:.0f} ms per frame)")
+            else:
+                print_tag("Frame Count", frames)
         else:
             print("No audio stream detected in container.")
 
@@ -191,7 +209,14 @@ def analyze_audio(audio_path: str) -> bool:
 
 
 def find_default_sample() -> str:
-    """Locate sample audio from datasets/audio directory."""
+    """Use the first audio file in this task's input/ folder, else the dataset sample."""
+    input_dir = Path(__file__).resolve().parent / "input"
+    if input_dir.is_dir():
+        files = sorted(f for f in input_dir.iterdir()
+                       if f.suffix.lower() in {".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac", ".opus", ".wma"})
+        if files:
+            return str(files[0])
+
     candidates = [
         Path(__file__).resolve().parent.parent / "datasets" / "audio" / "Afternoon_Window.mp3",
         Path("datasets/audio/Afternoon_Window.mp3"),

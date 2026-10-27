@@ -44,6 +44,7 @@ multimedia-lab/
 │
 ├── task-03-audio-analyser/             # 🎵 Audio Signal & Stream Properties Analyzer
 │   ├── audio_analyser.py
+│   ├── input/                          # put the audio file to analyse here
 │   └── outputs/
 │       └── task-03-audio-analysis.png
 │
@@ -219,22 +220,24 @@ python task-03-audio-analyser/audio_analyser.py
 python task-03-audio-analyser/audio_analyser.py --file path/to/audio.mp3
 ```
 
-Run against `datasets/audio/Afternoon_Window.mp3`:
+Run against `task-03-audio-analyser/input/demo.ogg` (the script picks the first audio file in `input/` when no file is given):
 
 ![Task 03 audio analysis output](task-03-audio-analyser/outputs/task-03-audio-analysis.png)
 
 | Property | Value |
 | --- | --- |
-| Container | MP2/3 (MPEG audio layer 2/3) |
-| File Size | 727.16 KB |
-| Duration | 00:00:30.772 |
-| Overall Bitrate | 193.58 kbps |
-| Codec | MP3 (MPEG audio layer 3) |
-| Sample Rate | 44100 Hz |
-| Channels | 2 (stereo) |
+| Container | Ogg (`ogg`) |
+| File Size | 26.42 KB |
+| Duration | 00:00:11.507 |
+| Overall Bitrate | 18.81 kbps |
+| Codec | Opus (Opus Interactive Audio Codec) |
+| Sample Rate | 48000 Hz |
+| Channels | 1 (mono) |
 | Sample Format | `fltp` |
-| Stream Bitrate | 192.00 kbps |
-| ID3 Tags | None embedded in this file |
+| Stream Bitrate | ~18.81 kbps (estimated from file size) |
+| Bits Per Sample | N/A (compressed format) |
+| Frame Count | 96 (~120 ms per frame) |
+| Tags | None embedded in this file |
 
 ---
 
