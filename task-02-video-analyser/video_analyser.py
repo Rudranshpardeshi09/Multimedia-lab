@@ -7,6 +7,7 @@ Author: Rudranshpardeshi09
 import os
 import sys
 import json
+import math
 import shutil
 import argparse
 import subprocess
@@ -77,6 +78,20 @@ def get_streams(streams: list):
         elif stream.get("codec_type") == "audio" and audio_stream is None:
             audio_stream = stream
     return video_stream, audio_stream
+
+
+def get_aspect_ratio(stream: dict) -> str:
+    """Display aspect ratio, worked out from width and height if not stored."""
+    stored = stream.get("display_aspect_ratio")
+    if stored and stored not in ("0:1", "N/A"):
+        w, h = (int(x) for x in stored.split(":"))
+    else:
+        w, h = stream.get("width"), stream.get("height")
+        if not (w and h):
+            return "Not Available"
+        divisor = math.gcd(w, h)
+        w, h = w // divisor, h // divisor
+    return f"{w}:{h} ({w / h:.2f}:1)"
 
 
 def print_tag(label: str, value):
@@ -181,7 +196,7 @@ def analyze_video(video_path: str) -> bool:
 
             v_br = video_stream.get("bit_rate")
             print_tag("Video Bitrate", f"{int(v_br) / 1000:.2f} kbps" if v_br else "Not Available")
-            print_tag("Aspect Ratio", video_stream.get("display_aspect_ratio"))
+            print_tag("Aspect Ratio", get_aspect_ratio(video_stream))
             print_tag("Pixel Format", video_stream.get("pix_fmt"))
         else:
             print("No video stream found.")
@@ -220,7 +235,14 @@ def analyze_video(video_path: str) -> bool:
 
 
 def find_default_sample() -> str:
-    """Locate sample video from datasets/video directory."""
+    """Use the first video in this task's input/ folder, else the dataset sample."""
+    input_dir = Path(__file__).resolve().parent / "input"
+    if input_dir.is_dir():
+        videos = sorted(f for f in input_dir.iterdir()
+                        if f.suffix.lower() in {".mp4", ".mov", ".mkv", ".avi", ".webm", ".m4v"})
+        if videos:
+            return str(videos[0])
+
     candidates = [
         Path(__file__).resolve().parent.parent / "datasets" / "video" / "voiceover.mp4",
         Path("datasets/video/voiceover.mp4"),

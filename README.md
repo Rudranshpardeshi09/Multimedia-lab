@@ -38,6 +38,7 @@ multimedia-lab/
 │
 ├── task-02-video-analyser/             # 🎥 Video Stream Demuxer & Metadata Analyzer
 │   ├── video_analyser.py
+│   ├── input/                          # put the video to analyse here
 │   └── outputs/
 │       └── task-02-video-analysis.png
 │
@@ -186,22 +187,23 @@ python task-02-video-analyser/video_analyser.py
 python task-02-video-analyser/video_analyser.py --file path/to/video.mp4
 ```
 
-Run against `datasets/video/voiceover.mp4`:
+Run against `task-02-video-analyser/input/final_POC-00350.mp4` (the script picks the first video in `input/` when no file is given):
 
 ![Task 02 video analysis output](task-02-video-analyser/outputs/task-02-video-analysis.png)
 
 | Property | Value |
 | --- | --- |
 | Container | QuickTime / MOV (`mov,mp4,m4a,3gp,3g2,mj2`) |
-| File Size | 2.65 MB |
-| Duration | 00:00:10.005 |
-| Overall Bitrate | 2223.35 kbps |
+| File Size | 5.47 MB |
+| Duration | 00:01:19.438 |
+| Overall Bitrate | 577.30 kbps |
 | Video Codec | H.264 / AVC / MPEG-4 part 10 (`h264`) |
-| Resolution | 1280 x 720 px @ 24.00 fps |
-| Video Bitrate | 2084.07 kbps |
+| Resolution | 1280 x 720 px @ 60.00 fps |
+| Aspect Ratio | 16:9 (1.78:1) |
+| Video Bitrate | 436.95 kbps |
 | Pixel Format | `yuv420p` |
 | Audio Codec | AAC (`aac`), 48000 Hz, stereo |
-| Audio Bitrate | 128.44 kbps |
+| Audio Bitrate | 127.43 kbps |
 
 ---
 
