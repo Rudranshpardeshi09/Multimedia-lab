@@ -58,8 +58,9 @@ multimedia-lab/
 │
 ├── task-05-image-enhancement/          # 🖼️ Image Processing & Enhancement
 │   ├── image_enhancer.py
+│   ├── input/                          # put the image to enhance here
 │   └── outputs/
-│       └── flower/before_after.png
+│       └── testimage/before_after.png
 │
 ├── datasets/                           # 🗂️ Categorized media assets
 │   ├── images/                         # flower.jpg, flower2.jpg
@@ -304,23 +305,24 @@ python task-05-image-enhancement/image_enhancer.py
 python task-05-image-enhancement/image_enhancer.py --file datasets/images/flower2.jpg --gamma 0.5
 ```
 
-Run against `datasets/images/flower.jpg` (left: original, right: histogram equalized):
+With no `--file`, the script uses the first image in `task-05-image-enhancement/input/`.
 
-![Task 05 before and after](task-05-image-enhancement/outputs/flower/before_after.png)
+Run against `task-05-image-enhancement/input/testimage.jpeg` (4096 x 2304 px). Left: original, right: histogram equalized:
+
+![Task 05 before and after](task-05-image-enhancement/outputs/testimage/before_after.png)
 
 | Image | Brightness | Contrast | Sharpness |
 | --- | --- | --- | --- |
-| original | 132.38 | 58.92 | 171.6 |
-| histogram_equalization | 128.39 | 73.17 | 269.3 |
-| gamma_correction | 156.28 | 52.78 | 132.3 |
-| sharpen | 132.24 | 61.47 | 872.0 |
-| median_denoise | 132.43 | 58.72 | 79.3 |
+| original | 135.19 | 72.74 | 518.0 |
+| histogram_equalization | 128.08 | 73.66 | 600.2 |
+| gamma_correction | 157.38 | 65.02 | 517.3 |
+| sharpen | 135.78 | 77.73 | 2883.7 |
+| median_denoise | 134.97 | 72.37 | 287.2 |
 
 **Reading the table:**
-- **Brightness** is the mean gray level. Gamma 0.7 raises it, as expected.
-- **Contrast** is the standard deviation. Histogram equalization increases it the most.
-- **Sharpness** is the variance of the Laplacian. Sharpening raises it about 5x, while the median filter lowers it because it smooths out fine detail along with the noise.
-
+- **Brightness** is the mean gray level. Gamma 0.7 brightens the image (135 → 157), and equalization pulls it slightly toward the middle.
+- **Contrast** is the standard deviation. Sharpening raises it the most here (72.7 → 77.7); equalization adds a little, because this photo already uses most of the tonal range.
+- **Sharpness** is the variance of the Laplacian. Sharpening raises it about 5.6x, while the median filter roughly halves it because it smooths out fine detail along with the noise.
 ---
 
 ## 🗂️ Datasets Catalog

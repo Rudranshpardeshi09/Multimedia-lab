@@ -70,5 +70,5 @@ task-04-voice-transformer/outputs/*
 
 # Task 05 generated images - keep only the before/after sample
 task-05-image-enhancement/outputs/**
-!task-05-image-enhancement/outputs/flower/
-!task-05-image-enhancement/outputs/flower/before_after.png
+!task-05-image-enhancement/outputs/testimage/
+!task-05-image-enhancement/outputs/testimage/before_after.png

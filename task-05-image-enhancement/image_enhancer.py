@@ -13,7 +13,8 @@ import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 
 TASK_DIR = Path(__file__).resolve().parent
-DEFAULT_IMAGE = TASK_DIR.parent / "datasets" / "images" / "flower.jpg"
+INPUT_DIR = TASK_DIR / "input"
+FALLBACK_IMAGE = TASK_DIR.parent / "datasets" / "images" / "flower.jpg"
 OUTPUT_DIR = TASK_DIR / "outputs"
 
 
@@ -69,6 +70,7 @@ def before_after(original: Image.Image, enhanced: Image.Image) -> Image.Image:
     canvas = Image.new("RGB", (original.width * 2, original.height), "white")
     canvas.paste(original, (0, 0))
     canvas.paste(enhanced, (original.width, 0))
+    canvas.thumbnail((1600, 1600))  # keep the preview small enough to view
     return canvas
 
 
@@ -124,9 +126,19 @@ def process_image(image_path: str, gamma: float) -> bool:
     return True
 
 
+def default_image() -> Path:
+    """First image in this task's input/ folder, else the dataset sample."""
+    if INPUT_DIR.is_dir():
+        images = sorted(f for f in INPUT_DIR.iterdir()
+                        if f.suffix.lower() in {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"})
+        if images:
+            return images[0]
+    return FALLBACK_IMAGE
+
+
 def main():
     parser = argparse.ArgumentParser(description="Task 05: Image Processing & Enhancement")
-    parser.add_argument("-f", "--file", default=str(DEFAULT_IMAGE), help="Path to the input image")
+    parser.add_argument("-f", "--file", default=str(default_image()), help="Path to the input image")
     parser.add_argument("-g", "--gamma", type=float, default=0.7, help="Gamma value (default 0.7)")
     args = parser.parse_args()
 
