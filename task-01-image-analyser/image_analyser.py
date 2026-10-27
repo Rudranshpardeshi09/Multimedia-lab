@@ -38,12 +38,31 @@ def get_exif_data(image: Image.Image) -> dict:
     return exif_data
 
 
-def get_resolution(image: Image.Image) -> str:
-    """Get image DPI / resolution if available."""
+def get_dpi(image: Image.Image):
+    """Return the DPI stored in the file, or None if there is none."""
     dpi = image.info.get("dpi")
     if dpi:
-        return f"{dpi[0]} x {dpi[1]} DPI"
-    return "Not Available"
+        return round(dpi[0]), round(dpi[1])
+    return None
+
+
+def get_resolution(image: Image.Image) -> str:
+    """Pixel resolution with its common name where there is one."""
+    names = {
+        (1280, 720): "HD", (1920, 1080): "Full HD", (2560, 1440): "QHD",
+        (3840, 2160): "4K UHD", (7680, 4320): "8K UHD",
+    }
+    size = tuple(sorted(image.size, reverse=True))
+    label = names.get(size)
+    return f"{image.width} x {image.height} px" + (f" ({label})" if label else "")
+
+
+def get_print_size(image: Image.Image) -> str:
+    """Physical print size using the stored DPI (300 DPI if none is stored)."""
+    dpi = get_dpi(image)[0] if get_dpi(image) else 300
+    width_in = image.width / dpi
+    height_in = image.height / dpi
+    return f"{width_in:.2f} x {height_in:.2f} in ({width_in * 2.54:.1f} x {height_in * 2.54:.1f} cm) @ {dpi} DPI"
 
 
 def print_exif_metadata(exif_data: dict):
@@ -121,7 +140,10 @@ def analyze_image(image_path: str) -> bool:
             print(f"Dimensions          : {width} x {height} px")
             print(f"Megapixels          : {megapixels:.2f} MP")
             print(f"Aspect Ratio        : {width / height:.2f}:1")
-            print(f"Resolution / DPI    : {get_resolution(img)}")
+            dpi = get_dpi(img)
+            print(f"Resolution          : {get_resolution(img)}")
+            print(f"DPI                 : {f'{dpi[0]} x {dpi[1]} DPI' if dpi else 'Not stored in file (viewers assume 72 DPI)'}")
+            print(f"Print Size          : {get_print_size(img)}")
             print(f"Color Mode          : {img.mode}")
             print(f"Number of Bands     : {len(img.getbands())} ({', '.join(img.getbands())})")
 
@@ -141,6 +163,7 @@ def analyze_image(image_path: str) -> bool:
 def find_default_sample() -> str:
     """Locate sample image from the datasets folder."""
     candidates = [
+        Path(__file__).resolve().parent / "input" / "bike.png",
         Path(__file__).resolve().parent.parent / "datasets" / "images" / "flower.jpg",
         Path(__file__).resolve().parent.parent / "datasets" / "images" / "flower2.jpg",
         Path("datasets/images/flower.jpg"),

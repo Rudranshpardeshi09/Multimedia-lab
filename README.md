@@ -31,6 +31,8 @@ multimedia-lab/
 │
 ├── task-01-image-analyser/             # 🖼️ Image Spatial & EXIF Metadata Analyzer
 │   ├── image_analyser.py
+│   ├── input/
+│   │   └── bike.png
 │   └── outputs/
 │       └── task-01-image-analysis.png
 │
@@ -153,18 +155,21 @@ python task-01-image-analyser/image_analyser.py
 python task-01-image-analyser/image_analyser.py --file datasets/images/flower2.jpg
 ```
 
-Run against `datasets/images/flower.jpg`:
+Run against `task-01-image-analyser/input/bike.png` (the default input):
 
 ![Task 01 image analysis output](task-01-image-analyser/outputs/task-01-image-analysis.png)
 
 | Property | Value |
 | --- | --- |
-| File Format | JPEG (ISO 10918) |
-| File Size | 130.40 KB |
-| Dimensions | 720 x 1600 px |
-| Megapixels | 1.15 MP |
-| Aspect Ratio | 0.45:1 |
-| Color Mode | RGB (3 bands) |
+| File Format | PNG (Portable network graphics) |
+| File Size | 7.35 MB |
+| Dimensions | 2752 x 1536 px |
+| Megapixels | 4.23 MP |
+| Aspect Ratio | 1.79:1 |
+| Resolution | 2752 x 1536 px |
+| DPI | 300 x 300 DPI |
+| Print Size | 9.17 x 5.12 in (23.3 x 13.0 cm) @ 300 DPI |
+| Color Mode | RGBA (4 bands) |
 | EXIF | Not embedded in this file |
 
 ---
